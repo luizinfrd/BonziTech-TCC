@@ -284,9 +284,8 @@ function mostrarFormEdicaoOrdemServico(serv) {
 }
 
 /**
- * Retorna estoque com nome contendo uma dada string.
- * @param {string} codOS - String para busca de nome.
- * @param {Array} serv - Array com todos os itens do estoque.
+ * @param {number} codOS - Código para busca.
+ * @param {Array} serv - Array com todos os itens da ordem de serviço.
  */
 function procurarItemOrdemServico(codOS, serv) {
     if (!codOS)
