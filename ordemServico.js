@@ -34,8 +34,8 @@ confirmarCriacaoOrdemServicoBtn.addEventListener("click", async (event) => {
     await criarOrdemServico(
         Number(dataEmissaoTextbox.value.trim()),
         Number(codCliTextbox.value.trim()),
-        Number(pedidoTextbox.value.trim()),
-        Number(concluidaTextbox.value.trim())
+        String(pedidoTextbox.value.trim()),
+        Boolean(concluidaTextbox.value.trim())
     );
 
     window.location.reload();
@@ -53,8 +53,8 @@ confirmarAtualizacaoOrdemServicoBtn.addEventListener("click", async (event) => {
     await atualizarOrdemServico(
         Number(dataEmissaoTextbox.value.trim()),
         Number(codCliTextbox.value.trim()),
-        Number(pedidoTextbox.value.trim()),
-        Number(concluidaTextbox.value.trim())
+        String(pedidoTextbox.value.trim()),
+        Boolean(concluidaTextbox.value.trim())
     );
 
     window.location.reload();
@@ -143,8 +143,8 @@ async function fetchOrdemServico() {
  * Envia dados de item da ordem de serviço para criação à API.
  * @param {Number} dataEmissao - Data de emissão.
  * @param {Number} codCli - Código de cliente.
- * @param {Number} pedido- Pedido.
- * @param {Number} concluida - Conclusão.
+ * @param {String} pedido- Pedido.
+ * @param {Boolean} concluida - Conclusão.
  * @returns {object} - Mensagem de erro ou sucesso.
  * @throws Retorna erro em caso de falha de conexão com a API ou servidor.
  */
@@ -181,8 +181,8 @@ async function criarOrdemServico(dataEmissao, codCli, pedido, concluida) {
  * @param {Number} codOS - Código da ordem de serviço
  * @param {Number} dataEmissao - Data de emissão.
  * @param {Number} codCli - Código de cliente.
- * @param {Number} pedido- Pedido.
- * @param {Number} concluida - Conclusão.
+ * @param {String} pedido- Pedido.
+ * @param {Boolean} concluida - Conclusão.
  * @returns {object} - Mensagem de erro ou sucesso.
  * @throws Retorna erro em caso de falha de conexão com a API ou servidor.
  */
