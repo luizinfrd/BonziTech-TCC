@@ -20,6 +20,7 @@ app.use("/entradas", require("./routes/entradasRoutes"));
 app.use("/estoque", require("./routes/estoqueRoutes"));
 app.use("/fabricantes", require("./routes/fabricantesRoutes"));
 app.use("/funcionarios", require("./routes/funcionariosRoutes"));
+app.use("/ordem-servico", require("./routes/ordemServicoRoutes"));
 app.use("/saidas", require("./routes/saidasRoutes"));
 app.use("/sessao", require("./routes/sessaoRoutes"));
 
