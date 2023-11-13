@@ -298,7 +298,7 @@ function mostrarFormEdicaoOrdemServico(serv) {
 }
 
 /**
- * Retorna ordem de serviço de acordo com o código do cliente.
+ * Retorna ordem de serviço de acordo com o código da ordem de serviço
  * @param {number} codOS - Código para busca.
  * @param {Array} serv - Array com todas as ordens de serviço.
  */
