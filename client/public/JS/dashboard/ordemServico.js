@@ -1,9 +1,16 @@
-let dadosOrdemServico, codOS;
+let dadosOrdemServico
+let codOS = null
 fetchOrdemServico()
-.then((res) => {
+  .then((res) => {
+    if (res && res.ordensServico) {
+      // Renomear a propriedade para o nome desejado
+      res.ordemServico = res.ordensServico;
+      delete res.ordensServico; // Remover a propriedade com o nome antigo
+    }
+
     dadosOrdemServico = res;
     mostrarTabelaOrdemServico(dadosOrdemServico.ordemServico);
-}); 
+  });
 
 const addOrdemServicoFormBtn = document.getElementById("add-table-row-ordem-servico");
 const cancelarCriacaoOrdemServicoBtn = document.getElementById("cancel-btn-ordem-servico");
@@ -30,13 +37,16 @@ confirmarCriacaoOrdemServicoBtn.addEventListener("click", async (event) => {
     const codCliTextbox = document.getElementById("add-codigo-cliente-ordem-servico");
     const pedidoTextbox = document.getElementById("add-pedido-ordem-servico");
     const concluidaTextbox = document.getElementById("add-concluida-ordem-servico");
+    
+        await criarOrdemServico(
+            dataEmissaoTextbox.value.trim(),
+            Number(codCliTextbox.value.trim()),
+            pedidoTextbox.value.trim(),
+            Boolean(concluidaTextbox.value)
+        );
 
-    await criarOrdemServico(
-        Date(dataEmissaoTextbox.value.trim()),
-        Number(codCliTextbox.value.trim()),
-        pedidoTextbox.value.trim(),
-        Boolean(concluidaTextbox.value.trim())
-    );
+    
+
 
     window.location.reload();
 });
@@ -49,13 +59,14 @@ confirmarAtualizacaoOrdemServicoBtn.addEventListener("click", async (event) => {
     const codCliTextbox = document.getElementById("edit-codigo-cliente-ordem-servico");
     const pedidoTextbox = document.getElementById("edit-pedido-ordem-servico");
     const concluidaTextbox = document.getElementById("edit-concluida-ordem-servico");
+    
 
     await atualizarOrdemServico(
         codOS,
-        Date(dataEmissaoTextbox.value.trim()),
+        String(dataEmissaoTextbox.value.trim()),
         Number(codCliTextbox.value.trim()),
         pedidoTextbox.value.trim(),
-        Boolean(concluidaTextbox.value.trim())
+        Boolean(concluidaTextbox.value)
     );
 
     window.location.reload();
@@ -77,6 +88,7 @@ async function mostrarTabelaOrdemServico(dadosTabela) {
     for (const serv of dadosTabela) {
         const coluna = document.createElement("tr");
         coluna.innerHTML = `
+        <td> ${serv.codOS} </td>
         <td> ${serv.dataEmissao} </td>
         <td> ${serv.codCli} </td>
         <td> ${serv.nomeCli} </td>
@@ -143,8 +155,8 @@ async function fetchOrdemServico() {
 
 /**
  * Envia dados de item da ordem de serviço para criação à API.
- * @param {Date} dataEmissao - Data de emissão.
- * @param {Number} codCli - Código de cliente.
+ * @param {string} dataEmissao - Data de emissão.
+ * @param {number} codCli - Código de cliente.
  * @param {string} pedido- Pedido.
  * @param {boolean} concluida - Status de ordem de serviço
  * @returns {object} - Mensagem de erro ou sucesso.
@@ -154,7 +166,7 @@ async function criarOrdemServico(dataEmissao, codCli, pedido, concluida) {
     return await fetch(`/ordem-servico`, {
         method: "POST",
         headers: {
-            "Content-type": "Application/JSON"
+            "Content-Type": "application/json"
         },
         body: JSON.stringify({
             dataEmissao,
@@ -173,6 +185,7 @@ async function criarOrdemServico(dataEmissao, codCli, pedido, concluida) {
         return res;
     })
     .catch((err) => {
+        console.error("Erro ao criar ordem de serviço:", err);
         mostrarMensagemErro("Erro ao conectar com o servidor. Tente novamente mais tarde.");
         return new Error(err);
     });
@@ -180,22 +193,21 @@ async function criarOrdemServico(dataEmissao, codCli, pedido, concluida) {
 
 /**
  * Envia dados de item da ordem de serviço para criação à API.
- * @param {Number} codOS - Código da ordem de serviço
- * @param {Date} dataEmissao - Data de emissão.
- * @param {Number} codCli - Código de cliente.
+ * @param {number} codOS - Código da ordem de serviço
+ * @param {string} dataEmissao - Data de emissão.
+ * @param {number} codCli - Código de cliente.
  * @param {string} pedido- Pedido.
  * @param {boolean} concluida - Status de ordem de serviço
  * @returns {object} - Mensagem de erro ou sucesso.
  * @throws Retorna erro em caso de falha de conexão com a API ou servidor.
  */
-async function atualizarOrdemServico(codOS, dataEmissao, codCli, pedido, concluida) {
+async function atualizarOrdemServico(dataEmissao, codCli, pedido, concluida) {
     return await fetch(`/ordem-servico`, {
         method: "PUT",
         headers: {
-            "Content-type": "Application/JSON"
+            "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            codOS,
             dataEmissao,
             codCli,
             pedido,
@@ -286,9 +298,9 @@ function mostrarFormEdicaoOrdemServico(serv) {
 }
 
 /**
- * Retorna ordem de serviço de acordo com o código OS.
+ * Retorna ordem de serviço de acordo com o código do cliente.
  * @param {number} codOS - Código para busca.
- * @param {Array} serv - Array com todos as ordens de serviço.
+ * @param {Array} serv - Array com todas as ordens de serviço.
  */
 function procurarItemOrdemServico(codOS, serv) {
     if (!codOS)
