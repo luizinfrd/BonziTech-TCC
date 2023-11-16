@@ -1,11 +1,10 @@
-let dadosOrdemServico
-let codOS = null
+let dadosOrdemServico, codOS
 fetchOrdemServico()
   .then((res) => {
     if (res && res.ordensServico) {
-      // Renomear a propriedade para o nome desejado
+
       res.ordemServico = res.ordensServico;
-      delete res.ordensServico; // Remover a propriedade com o nome antigo
+      delete res.ordensServico; 
     }
 
     dadosOrdemServico = res;
@@ -38,15 +37,13 @@ confirmarCriacaoOrdemServicoBtn.addEventListener("click", async (event) => {
     const pedidoTextbox = document.getElementById("add-pedido-ordem-servico");
     const concluidaTextbox = document.getElementById("add-concluida-ordem-servico");
     
+    
         await criarOrdemServico(
             dataEmissaoTextbox.value.trim(),
             Number(codCliTextbox.value.trim()),
             pedidoTextbox.value.trim(),
-            Boolean(concluidaTextbox.value)
+            concluidaTextbox.checked
         );
-
-    
-
 
     window.location.reload();
 });
@@ -59,17 +56,17 @@ confirmarAtualizacaoOrdemServicoBtn.addEventListener("click", async (event) => {
     const codCliTextbox = document.getElementById("edit-codigo-cliente-ordem-servico");
     const pedidoTextbox = document.getElementById("edit-pedido-ordem-servico");
     const concluidaTextbox = document.getElementById("edit-concluida-ordem-servico");
-    
 
     await atualizarOrdemServico(
         codOS,
-        String(dataEmissaoTextbox.value.trim()),
+        dataEmissaoTextbox.value.trim(),
         Number(codCliTextbox.value.trim()),
         pedidoTextbox.value.trim(),
-        Boolean(concluidaTextbox.value)
+        concluidaTextbox.checked
     );
 
     window.location.reload();
+
 });
 
 /**
@@ -87,9 +84,15 @@ async function mostrarTabelaOrdemServico(dadosTabela) {
 
     for (const serv of dadosTabela) {
         const coluna = document.createElement("tr");
+        if (serv.concluida == true){
+            serv.concluida = 'Sim'
+        } else{
+            serv.concluida = 'Não'
+        }
+        
         coluna.innerHTML = `
         <td> ${serv.codOS} </td>
-        <td> ${serv.dataEmissao} </td>
+        <td> ${serv.dataEmissao.substring(0, 11)} </td>
         <td> ${serv.codCli} </td>
         <td> ${serv.nomeCli} </td>
         <td> ${serv.pedido} </td>
@@ -113,6 +116,7 @@ async function mostrarTabelaOrdemServico(dadosTabela) {
         btnEdit.addEventListener("click", (event) => {
             event.preventDefault();
             mostrarFormEdicaoOrdemServico(serv);
+            codOS = serv.codOS
         });
         btnEdit.innerHTML = '<i class="fa-solid fa-pen-to-square"> </i>';
 
@@ -163,7 +167,7 @@ async function fetchOrdemServico() {
  * @throws Retorna erro em caso de falha de conexão com a API ou servidor.
  */
 async function criarOrdemServico(dataEmissao, codCli, pedido, concluida) {
-    return await fetch(`/ordem-servico`, {
+    return fetch(`/ordem-servico`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -179,7 +183,7 @@ async function criarOrdemServico(dataEmissao, codCli, pedido, concluida) {
     .then((res) => {
         if (res.error) {
             mostrarMensagemErro(res.error);
-            return new Error(res.error);
+            return Error(res.error);
         }
 
         return res;
@@ -201,13 +205,14 @@ async function criarOrdemServico(dataEmissao, codCli, pedido, concluida) {
  * @returns {object} - Mensagem de erro ou sucesso.
  * @throws Retorna erro em caso de falha de conexão com a API ou servidor.
  */
-async function atualizarOrdemServico(dataEmissao, codCli, pedido, concluida) {
-    return await fetch(`/ordem-servico`, {
+async function atualizarOrdemServico(codOS, dataEmissao, codCli, pedido, concluida) {
+    return fetch(`/ordem-servico`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
+            codOS,
             dataEmissao,
             codCli,
             pedido,
@@ -218,7 +223,7 @@ async function atualizarOrdemServico(dataEmissao, codCli, pedido, concluida) {
     .then((res) => {
         if (res.error) {
             mostrarMensagemErro(res.error);
-            return new Error(res.error);
+            return Error(res.error);
         }
 
         return res;
@@ -298,7 +303,7 @@ function mostrarFormEdicaoOrdemServico(serv) {
 }
 
 /**
- * Retorna ordem de serviço de acordo com o código da ordem de serviço
+ * Retorna ordem de serviço de acordo com o código do cliente.
  * @param {number} codOS - Código para busca.
  * @param {Array} serv - Array com todas as ordens de serviço.
  */
