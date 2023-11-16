@@ -846,22 +846,16 @@
 
                     <form>
                         <label>Data de Emissão</label>
-                        <input type="text" id="add-data-emissao-ordem-servico">
+                        <input type="date" id="add-data-emissao-ordem-servico">
 
                         <label>Código do Cliente</label>
                         <input type="text" id="add-codigo-cliente-ordem-servico">
-
-                        <label>Nome do Cliente</label>
-                        <input type="text" id="add-nome-cliente-ordem-servico">
 
                         <label>Pedido</label>
                         <input type="text" id="add-pedido-ordem-servico">
 
                         <label>Concluída</label>
-                        <select id="add-concluida-ordem-servico">
-                            <option value="true">Concluído</option>
-                            <option value="false">Não concluído</option>
-                        </select>
+                        <input type="checkbox" id="add-concluida-ordem-servico" value="true">
 
                         <div class="form-btns">
                             <button id="confirm-btn-ordem-servico">Adicionar</button>
@@ -874,23 +868,18 @@
                     <h1>Editar Item</h1>
 
                     <form>
+
                         <label>Data de Emissão</label>
-                        <input type="text" id="edit-data-emissao-ordem-servico">
+                        <input type="date" id="edit-data-emissao-ordem-servico">
 
                         <label>Código do Cliente</label>
                         <input type="text" id="edit-codigo-cliente-ordem-servico">
-
-                        <label>Nome do Cliente</label>
-                        <input type="text" id="edit-nome-cliente-ordem-servico">
 
                         <label>Pedido</label>
                         <input type="text" id="edit-pedido-ordem-servico">
 
                         <label>Concluída</label>
-                        <select id="edit-concluida-ordem-servico">
-                            <option value="true">Concluído</option>
-                            <option value="false">Não concluído</option>
-                        </select>
+                        <input type="checkbox" id="edit-concluida-ordem-servico" value="true"> Se a ordem de serviço estiver concluída, marque a caixa. Se não estiver, deixe em branco
 
                         <div class="form-btns">
                             <button id="update-btn-ordem-servico">Adicionar</button>
