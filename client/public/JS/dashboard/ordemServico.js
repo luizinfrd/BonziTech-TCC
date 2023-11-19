@@ -35,15 +35,15 @@ confirmarCriacaoOrdemServicoBtn.addEventListener("click", async (event) => {
     const dataEmissaoTextbox = document.getElementById("add-data-emissao-ordem-servico");
     const codCliTextbox = document.getElementById("add-codigo-cliente-ordem-servico");
     const pedidoTextbox = document.getElementById("add-pedido-ordem-servico");
-    const concluidaTextbox = document.getElementById("add-concluida-ordem-servico");
-    
-    
-        await criarOrdemServico(
-            dataEmissaoTextbox.value.trim(),
-            Number(codCliTextbox.value.trim()),
-            pedidoTextbox.value.trim(),
-            concluidaTextbox.checked
-        );
+    const concluidaSelect = document.getElementById("add-concluida-ordem-servico");
+    const concluida = concluidaSelect.value === "true";
+
+    await criarOrdemServico(
+        dataEmissaoTextbox.value.trim(),
+        Number(codCliTextbox.value.trim()),
+        pedidoTextbox.value.trim(),
+        concluida
+    );
 
     window.location.reload();
 });
@@ -55,18 +55,18 @@ confirmarAtualizacaoOrdemServicoBtn.addEventListener("click", async (event) => {
     const dataEmissaoTextbox = document.getElementById("edit-data-emissao-ordem-servico");
     const codCliTextbox = document.getElementById("edit-codigo-cliente-ordem-servico");
     const pedidoTextbox = document.getElementById("edit-pedido-ordem-servico");
-    const concluidaTextbox = document.getElementById("edit-concluida-ordem-servico");
+    const concluidaSelect = document.getElementById("edit-concluida-ordem-servico");
+    const concluida = concluidaSelect.value === "true";
 
     await atualizarOrdemServico(
         codOS,
         dataEmissaoTextbox.value.trim(),
         Number(codCliTextbox.value.trim()),
         pedidoTextbox.value.trim(),
-        concluidaTextbox.checked
+        concluida
     );
 
     window.location.reload();
-
 });
 
 /**
@@ -167,6 +167,14 @@ async function fetchOrdemServico() {
  * @throws Retorna erro em caso de falha de conexão com a API ou servidor.
  */
 async function criarOrdemServico(dataEmissao, codCli, pedido, concluida) {
+    const ordensServico = dadosOrdemServico.ordemServico;
+    const codExistente = ordensServico.find(serv => serv.codCli !== codCli);
+
+    if (codExistente) {
+        mostrarMensagemErro("Código de cliente inválido.");
+        return new Error("Código de cliente inválido");
+    }
+    
     return fetch(`/ordem-servico`, {
         method: "POST",
         headers: {
@@ -206,6 +214,14 @@ async function criarOrdemServico(dataEmissao, codCli, pedido, concluida) {
  * @throws Retorna erro em caso de falha de conexão com a API ou servidor.
  */
 async function atualizarOrdemServico(codOS, dataEmissao, codCli, pedido, concluida) {
+    const ordensServico = dadosOrdemServico.ordemServico;
+    const codExistente = ordensServico.find(serv => serv.codCli !== codCli);
+
+    if (codExistente) {
+        mostrarMensagemErro("Código de cliente inválido.");
+        return new Error("Código de cliente inválido");
+    }
+    
     return fetch(`/ordem-servico`, {
         method: "PUT",
         headers: {
