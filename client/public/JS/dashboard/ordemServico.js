@@ -319,19 +319,20 @@ function mostrarFormEdicaoOrdemServico(serv) {
 }
 
 /**
- * Retorna ordem de serviço de acordo com o código do cliente.
+ * Retorna ordem de serviço de acordo com o código da ordem de serviço.
  * @param {number} codOS - Código para busca.
  * @param {Array} serv - Array com todas as ordens de serviço.
  */
 function procurarItemOrdemServico(codOS, serv) {
-    if (!codOS)
+    if (!codOS) {
         return serv;
-
-    const ordemServico = [];
-    for (const item of serv) {
-        if (item.codOS== codOS) 
-            ordemServico.push(item);
     }
+
+    const codOSRegex = new RegExp(codOS, 'i'); 
+
+    const ordemServico = serv.filter((item) => {
+        return codOSRegex.test(String(item.codOS));
+    });
 
     return ordemServico;
 }
