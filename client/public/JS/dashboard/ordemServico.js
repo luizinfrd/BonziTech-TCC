@@ -11,6 +11,12 @@ fetchOrdemServico()
     mostrarTabelaOrdemServico(dadosOrdemServico.ordemServico);
   });
 
+fetchClientes()
+.then((res) => {
+    dadosClientes = res.clientes
+    mostrarCodigoCliente(dadosClientes)
+}); 
+
 const addOrdemServicoFormBtn = document.getElementById("add-table-row-ordem-servico");
 const cancelarCriacaoOrdemServicoBtn = document.getElementById("cancel-btn-ordem-servico");
 addOrdemServicoFormBtn.addEventListener("click", mostrarFormCriacaoOrdemServico);
@@ -158,6 +164,32 @@ async function fetchOrdemServico() {
 }
 
 /**
+ * Pega todos os item cadastrados de clientes pela API
+ * @returns {object} - Resposta da API ou Objeto de erro.
+ * @throws Retorna erro em caso de falha de conexão com a 
+ * API ou servidor.
+ */
+async function fetchClientes() {
+    return await fetch("/clientes")
+    .then((res) => res.json())
+    .then((res) => {
+        if (res == null) 
+            return null
+
+        if (res.error) {
+            mostrarMensagemErro(res.error);
+            return new Error(res.error);
+        }
+
+        return res;
+    })
+    .catch((err) => {
+        mostrarMensagemErro("Erro ao conectar com o servidor. Tente novamente mais tarde.");
+        return new Error(err);
+    });
+}
+
+/**
  * Envia dados de item da ordem de serviço para criação à API.
  * @param {string} dataEmissao - Data de emissão.
  * @param {number} codCli - Código de cliente.
@@ -279,6 +311,27 @@ function confirmarExclusaoOrdemServico() {
         "Você tem certeza que deseja excluir este item da ordem de serviço? Esta função é " +
         "irreversível."
     );
+}
+
+/**
+ * Alimenta o select com os códigos de cliente existentes.
+ * @param {Array} dadosClientes - Lista com os códigos a serem mostrados. 
+ */
+async function mostrarCodigoCliente(dadosClientes){
+    const addCodCli = document.getElementById("add-codigo-cliente-ordem-servico");
+    const editCodCli = document.getElementById("edit-codigo-cliente-ordem-servico");
+
+    for (const cod of dadosClientes) {
+        var opt = document.createElement("option");
+        opt.text = cod.codCli;
+        addCodCli.add(opt);		    
+    }
+
+    for (const cod of dadosClientes) {
+        var opt = document.createElement("option");
+        opt.text = cod.codCli;
+        editCodCli.add(opt);		    
+    }
 }
 
 /**
