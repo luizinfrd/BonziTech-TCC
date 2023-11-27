@@ -89,3 +89,5 @@ osRouter.delete("/:codOS", validarSessao, (req, res) => {
         res.status(500).json({ error: "Erro ao conectar com o servidor." });
     });
 });
+
+module.exports = osRouter
