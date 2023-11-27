@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/f4f13ff542.js" crossorigin="anonymous"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="/JS/dashboard.js" defer></script>
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <aside id="aside" class="aside">
+        <ul>
+            <li class="logo">
+                <img src="/img/logo-bonziboard.svg" alt="logo">
+                <img id="mini-logo" src="/img/logo-bonziboard-mini.svg" alt="">
+            </li>
+
+            <i onclick="closeMenu()" class="fa-solid fa-xmark fa-2xl"></i>
+
+            <li><a class="nav-option" href="/dashboard" id="nav-visao" data-section="visao-geral">
+                    <i class="fa-solid fa-house"></i>
+                    <span class="nav-item">Visão Geral</span>
+                </a></li>
+
+            <li><a class="nav-option" href="/dashboard?tabela=funcionarios" id="nav-funcionarios"
+                    data-section="funcionarios">
+                    <i class="fa-solid fa-user"></i>
+                    <span class="nav-item">Funcionários</span>
+                </a></li>
+
+            <li><a class="nav-option" href="/dashboard?tabela=clientes" id="nav-clientes" data-section="visao-geral">
+                    <i class="fa-solid fa-users"></i>
+                    <span class="nav-item">Clientes</span>
+                </a></li>
+
+            <li><a class="nav-option" href="/dashboard?tabela=fabricantes" id="nav-fabricantes">
+                    <i class="fa-solid fa-boxes-packing"></i>
+                    <span class="nav-item">Fabricantes</span>
+                </a></li>
+
+            <li><a class="nav-option" href="/dashboard?tabela=componentes" id="nav-componentes">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span class="nav-item">Componentes</span>
+                </a></li>
+
+            <li><a class="nav-option" href="/dashboard?tabela=estoque" id="nav-estoque">
+                    <i class="fa-solid fa-box-archive"></i>
+                    <span class="nav-item">Estoque</span>
+                </a></li>
+
+            <li><a class="nav-option" href="/dashboard?tabela=ordemServico" id="nav-ordem-servico">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span class="nav-item">Ordem de Serviço</span>
+                </a></li>
+
+            <li><a class="nav-option" href="/dashboard?tabela=entradas" id="nav-entradas">
+                    <i class="fa-solid fa-circle-arrow-up"></i>
+                    <span class="nav-item">Entradas</span>
+                </a></li>
+
+            <li><a class="nav-option" href="/dashboard?tabela=saidas" id="nav-saidas">
+                    <i class="fa-solid fa-circle-arrow-down"></i>
+                    <span class="nav-item">Saídas</span>
+                </a></li>
+        </ul>
+    </aside>
+
+    <!-- ASIDE END -->
+
+    <main>
+
+        <div class="top">
+            <ion-icon onclick="toggleMenu()" class="menu-bar" name="menu"></ion-icon>
+            <h1 id="titulo-tabela">Visão Geral</h1>
+            <div class="right">
+                <div class="input-container">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-bar" placeholder="Procurar...">
+                </div>
+                <div class="account">
+                    <div class="profile" id="profile"></div>
+                </div>
+
+                <div class="profile-menu" id="profile-menu">
+                    <div class="profile-menu-content">
+                        <li><a href="/perfil">Meu Perfil</a></li>
+                        <li id="profile-log-out"><a href="#">Sair</a></li>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visão geral -->
+        <section id="visao-geral" class="hero">
+            <iframe id="looker"
+                src="https://lookerstudio.google.com/embed/reporting/bb918e49-5fdc-452d-a918-c47dff084404/page/pFHgD"
+                frameborder="0" style="border:0" allowfullscreen></iframe>
+        </section>
+
+        <!-- Funcionários -->
+        <section id="funcionarios" class="hero">
+
+            <div class="table-area">
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-funcionarios">
+
+                    </tbody>
+                </table>
+
+                <div id="add-funcionario-form" class="add-form">
+                    <div class="add-form-title">
+                        <h1>Adicionar Funcionário</h1>
+                        <span id="cancel-funcionario-post-icon"><i class="fa-solid fa-xmark fa-fw"></i></span>
+                    </div>
+
+                    <form>
+                        <label>Permissão</label>
+                        <input type="text" id="add-funcionario-permission" required>
+
+                        <label for="nome">Nome</label>
+                        <input type="text" id="add-funcionario-name" required>
+
+                        <label for="email">Email</label>
+                        <input type="text" id="add-funcionario-email" required>
+
+                        <label for="senha">Senha</label>
+                        <input type="password" id="add-funcionario-password" required
+                            title="Senha deve ter no mínimo 8 caracteres." pattern=".{8,}">
+                        <p>Senha deve ter no mínimo 8 caracteres.</p>
+
+
+                        <div class="form-btns">
+                            <button class="confirm-btn" id="confirm-criacao-funcionario-btn">Adicionar</button>
+                            <button class="cancel-btn" id="cancel-criacao-funcionario-btn">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="edit-funcionario-form" class="edit-form">
+                    <div class="add-form-title">
+                        <h1>Editar Funcionário</h1>
+                        <span><i id="cancel-funcionario-edit-icon" class="fa-solid fa-xmark fa-fw"></i></span>
+                    </div>
+
+                    <form>
+                        <label for="permissao">Permissão</label>
+                        <input type="text" id="edit-funcionario-permission" required>
+
+                        <label for="nome">Nome</label>
+                        <input type="text" id="edit-funcionario-name" required>
+
+                        <label for="email">Email</label>
+                        <input type="text" id="edit-funcionario-email" required>
+
+                        <label for="senha">Confirme sua senha</label>
+                        <input type="password" id="edit-funcionario-password" required
+                            title="Senha deve ter no mínimo 8 caracteres." pattern=".{8,}">
+
+
+                        <div class="form-btns">
+                            <button class="confirm-btn" id="update-funcionario-btn">Atualizar</button>
+                            <button class="cancel-btn" id="edit-funcionario-cancel-btn">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <button id="add-funcionario-table-row" class="add-table-row"><i class="fa-solid fa-plus fa-2x"></i></button>
+        </section>
+
+        <!-- Clientes -->
+        <section id="clientes" class="hero">
+
+            <div class="table-area">
+                <table id="tabela-clientes">
+                    <thead>
+                        <tr>
+                            <th>Empresa</th>
+                            <th>Cliente</th>
+                            <th>Tipo</th>
+                            <th>Registro</th>
+                            <th>Endereço</th>
+                            <th>Bairro</th>
+                            <th>Cidade</th>
+                            <th>Estado</th>
+                            <th>Cep</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-clientes">
+
+                    </tbody>
+                </table>
+
+                <div class="add-form" id="add-form-clientes">
+                    <h1>Adicionar Cliente</h1>
+
+                    <form>
+                        <label>Empresa *</label>
+                        <input type="text" id="add-empresa-clientes" required>
+
+                        <label>Cliente *</label>
+                        <input type="text" id="add-cliente-clientes" required>
+
+                        <label>Tipo</label>
+                        <input type="text" id="add-tipo-clientes">
+
+                        <label>Endereço</label>
+                        <input type="text" id="add-endereco-clientes">
+
+                        <label>Bairro</label>
+                        <input type="text" id="add-bairro-clientes">
+
+                        <label>Cidade *</label>
+                        <input type="text" id="add-cidade-clientes" required>
+
+                        <label>Estado *</label>
+                        <input type="text" id="add-estado-clientes" required>
+
+                        <label>Cep</label>
+                        <input type="text" id="add-cep-clientes">
+
+                        <label>Email</label>
+                        <input type="text" id="add-email-clientes">
+
+
+                        <div class="form-btns">
+                            <button class="confirm-btn" id="confirm-btn-clientes">Adicionar</button>
+                            <button class="cancel-btn" id="cancel-btn-clientes">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="edit-form" id="edit-form-clientes">
+                    <h1>Editar Cliente</h1>
+
+                    <form>
+                        <label>Empresa</label>
+                        <input type="text" id="edit-empresa-clientes" required>
+
+                        <label>Cliente</label>
+                        <input type="text" id="edit-cliente-clientes" required>
+
+                        <label>Tipo</label>
+                        <input type="text" id="edit-tipo-clientes" required>
+
+                        <label>Endereço</label>
+                        <input type="text" id="edit-endereco-clientes" required>
+
+                        <label>Bairro</label>
+                        <input type="text" id="edit-bairro-clientes" required>
+
+                        <label>Cidade</label>
+                        <input type="text" id="edit-cidade-clientes" required>
+
+                        <label>Estado</label>
+                        <input type="text" id="edit-estado-clientes" required>
+
+                        <label>Cep</label>
+                        <input type="text" id="edit-cep-clientes" required>
+
+                        <label>Email</label>
+                        <input type="text" id="edit-email-clientes" required>
+
+
+                        <div class="form-btns">
+                            <button class="confirm-btn" id="update-btn-edit-clientes">Atualizar</button>
+                            <button class="cancel-btn" id="cancel-btn-edit-clientes">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <button class="add-table-row" id="add-table-row-clientes"><i class="fa-solid fa-plus fa-2x"></i></button>
+        </section>
+
+        <!-- Fabricantes -->
+        <section id="fabricantes" class="hero">
+
+            <div class="table-area">
+                <table id="tabela-fabricantes">
+                    <thead>
+                        <tr>
+                            <th>Fabricante</th>
+                            <th>Nome contato</th>
+                            <th>Razão Social</th>
+                            <th>Telefone</th>
+                            <th>Fax</th>
+                            <th>Celular</th>
+                            <th>Endereço</th>
+                            <th>Cidade</th>
+                            <th>Estado</th>
+                            <th>Cep</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-fabricantes">
+
+                    </tbody>
+                </table>
+
+                <div class="add-form" id="add-form-fabricantes" style="display: none;">
+                    <h1>Adicionar Fabricante</h1>
+
+                    <form>
+                        <label>Fabricante</label>
+                        <input type="text" id="add-fabricante-fabricantes" required>
+
+                        <label>Nome contato</label>
+                        <input type="text" id="add-nome-contato-fabricantes">
+
+                        <label>Razão Social</label>
+                        <input type="text" id="add-razao-social-fabricantes">
+
+                        <label>Telefone</label>
+                        <input type="tel" id="add-telefone-fabricantes">
+
+                        <label>Fax</label>
+                        <input type="text" id="add-fax-fabricantes">
+
+                        <label>Celular</label>
+                        <input type="tel" id="add-celular-fabricantes">
+
+                        <label>Endereço</label>
+                        <input type="text" id="add-endereco-fabricantes">
+
+                        <label>Cidade</label>
+                        <input type="text" id="add-cidade-fabricantes">
+
+                        <label>Estado</label>
+                        <input type="text" id="add-estado-fabricantes">
+
+                        <label>Cep</label>
+                        <input type="text" id="add-cep-fabricantes">
+
+                        <div class="form-btns">
+                            <button class="confirm-btn" id="confirm-btn-fabricantes">Adicionar</button>
+                            <button class="cancel-btn" id="cancel-btn-fabricantes">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="edit-form" id="edit-form-fabricantes">
+                    <h1>Editar Fabricante</h1>
+
+                    <form>
+                        <label>Fabricante</label>
+                        <input type="text" id="edit-fabricante-fabricantes" required>
+
+                        <label>Nome contato</label>
+                        <input type="tel" id="edit-nome-contato-fabricantes">
+
+                        <label>Razão Social</label>
+                        <input type="text" id="edit-razao-social-fabricantes">
+
+                        <label>Telefone</label>
+                        <input type="tel" id="edit-telefone-fabricantes">
+
+                        <label>Fax</label>
+                        <input type="text" id="edit-fax-fabricantes">
+
+                        <label>Celular</label>
+                        <input type="tel" id="edit-celular-fabricantes">
+
+                        <label>Endereço</label>
+                        <input type="text" id="edit-endereco-fabricantes">
+
+                        <label>Cidade</label>
+                        <input type="text" id="edit-cidade-fabricantes">
+
+                        <label>Estado</label>
+                        <input type="text" id="edit-estado-fabricantes">
+
+                        <label>Cep</label>
+                        <input type="text" id="edit-cep-fabricantes">
+
+
+                        <div class="form-btns">
+                            <button class="confirm-btn" id="confirm-btn-edit-fabricantes">Adicionar</button>
+                            <button class="cancel-btn" id="cancel-btn-edit-fabricantes">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <button class="add-table-row" id="add-table-row-fabricantes"><i class="fa-solid fa-plus fa-2x"></i></button>
+        </section>
+
+        <!-- Componentes -->
+        <section id="componentes" class="hero">
+            <div class="table-area">
+                <table id="tabela-componentes">
+                    <thead>
+                        <tr>
+                            <th>Cod. Peça</th>
+                            <th>Especificação</th>
+                            <th>Categoria</th>
+                            <th>Sub Categoria</th>
+                            <th>Diâmetro Interno</th>
+                            <th>Diâmetro Externo</th>
+                            <th>Diâmetro Nominal</th>
+                            <th>Medida</th>
+                            <th>Costura</th>
+                            <th>Prensado Reusável</th>
+                            <th>Mangueira</th>
+                            <th>Material</th>
+                            <th>Norma</th>
+                            <th>Bitola</th>
+                            <th>Valor de Entrada</th>
+                            <th>Valor de Venda</th>
+                            <th id="listaction">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-componentes">
+
+                    </tbody>
+                </table>
+
+                <div id="add-componentes-form" class="add-form">
+                    <div class="add-form-title">
+                        <h1>Adicionar Componente</h1>
+                        <span id="cancel-componente-post-icon"><i class="fa-solid fa-xmark fa-fw"></i></span>
+                    </div>
+
+                    <form id="add-formulario-componente">
+                        <label>C&oacute;digo da Peça</label>
+                        <input type="text" id="add-codpeca-componentes" maxlength="10">
+
+                        <label>Especificac&ccedil;&atilde;o</label>
+                        <input type="text" id="add-especificacao-componentes" maxlength="30">
+
+                        <label>Categoria</label>
+                        <!--<input type="text" id="add-categoria-componentes" maxlength="100">-->
+                        <select id="add-categoria-componentes">
+                            <option value="null" selected>Selecionar Categoria</option>
+                        </select>
+
+                        <label>Sub Categoria</label>
+                        <!--<input type="text" id="add-subcategoria-componentes" maxlength="100">-->
+                        <select id="add-subcategoria-componentes">
+                            <option value="null" selected>Selecionar Sub-Categoria</option>
+                        </select>
+
+                        <label>Diâmetro Interno</label>
+                        <input type="text" id="add-dia-interno-componentes" maxlength="10">
+
+                        <label>Diâmetro Externo</label>
+                        <input type="number" id="add-dia-externo-componentes" maxlength="3" min="0" max="999" />
+
+                        <label>Diâmetro Nominal</label>
+                        <!--<input type="number" step="1" pattern="\d+" id="add-dia-nominal-componentes" maxlength="6">-->
+                        <input type="text" id="add-dia-nominal-componentes" maxlength="6">
+
+                        <label>Medida</label>
+                        <input type="number" id="add-medida-componentes" maxlength="6" min="0" max="999999" />
+
+                        <label>Costura</label>
+                        <!--<input type="number" step="1" pattern="\d+" id="add-costura-componentes" maxlength="6">-->
+                        <select id="add-costura-componentes">
+                            <option value="true" selected>Sim</option>
+                            <option value="false">Não</option>
+                        </select>
+
+                        <label>Prensado Reusável</label>
+                        <input type="text" id="add-pren-reusavel-componentes" maxlength="1">
+
+                        <label>Mangueira</label>
+                        <input type="text" id="add-mangueira-componentes" maxlength="30">
+
+                        <label>Material</label>
+                        <input type="text" id="add-material-componentes" maxlength="20">
+
+                        <label>Norma</label>
+                        <input type="text" id="add-norma-componentes" maxlength="20">
+
+                        <label>Bitola</label>
+                        <input type="number" id="add-bitola-componentes" maxlength="10" min="0" max="9999999999" />
+
+                        <label>Valor de Entrada</label>
+                        <input id="add-valor-entrada-componentes" type="text" placeholder="0,00" min="0" value="0,00" />
+
+                        <label>Valor de Saída</label>
+                        <input id="add-valor-saida-componentes" type="text" placeholder="0,00" min="0" value="0,00" />
+
+                        <div class="form-btns">
+                            <button class="confirm-btn" id="confirm-criacao-componente-btn">Adicionar</button>
+                            <button class="cancel-btn" id="cancel-criacao-componente-btn">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="edit-componentes-form" class="edit-form">
+                    <div class="add-form-title">
+                        <h1>Editar Componente</h1>
+                        <span><i id="cancel-componente-edit-icon" class="fa-solid fa-xmark fa-fw"></i></span>
+                    </div>
+
+                    <form id="edit-formulario-componente">
+                        <label>C&oacute;digo da Peça</label>
+                        <input type="text" id="edit-codpeca-componentes" maxlength="10">
+
+                        <label>Especificac&ccedil;&atilde;o</label>
+                        <input type="text" id="edit-especificacao-componentes" maxlength="30">
+
+                        <label>Categoria</label>
+                        <select id="edit-categoria-componentes">
+                            <option value="null" selected>Selecionar Categoria</option>
+                        </select>
+
+                        <label>Sub-Categoria</label>
+                        <select id="edit-subcategoria-componentes">
+                            <option value="null" selected>Selecionar Sub-Categoria</option>
+                        </select>
+
+                        <label>Diâmetro Interno</label>
+                        <input type="text" id="edit-dia-interno-componentes" maxlength="10">
+
+                        <label>Diâmetro Externo</label>
+                        <input type="number" id="edit-dia-externo-componentes" maxlength="3" min="0" max="999" />
+
+                        <label>Diâmetro Nominal</label>
+                        <input type="text" id="edit-dia-nominal-componentes" maxlength="6">
+
+                        <label>Medida</label>
+                        <input type="number" id="edit-medida-componentes" maxlength="6" min="0" max="999999" />
+
+                        <label>Costura</label>
+                        <select id="edit-costura-componentes">
+                            <option value="true" selected>Sim</option>
+                            <option value="false">Não</option>
+                        </select>
+
+                        <label>Prensado Reusável</label>
+                        <input type="text" id="edit-pren-reusavel-componentes" maxlength="1">
+
+                        <label>Mangueira</label>
+                        <input type="text" id="edit-mangueira-componentes" maxlength="30">
+
+                        <label>Material</label>
+                        <input type="text" id="edit-material-componentes" maxlength="20">
+
+                        <label>Norma</label>
+                        <input type="text" id="edit-norma-componentes" maxlength="20">
+
+                        <label>Bitola</label>
+                        <input type="number" id="edit-bitola-componentes" maxlength="10" min="0" max="9999999999" />
+
+                        <label>Valor de Entrada</label>
+                        <input id="edit-valor-entrada-componentes" type="text" placeholder="0,00" min="0"
+                            value="0,00" />
+
+                        <label>Valor de Saída</label>
+                        <input id="edit-valor-saida-componentes" type="text" placeholder="0,00" min="0" value="0,00" />
+
+                        <div class="form-btns">
+                            <button class="confirm-btn" id="update-componente-btn">Salvar</button>
+                            <button class="cancel-btn" id="edit-componente-cancel-btn">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <button class="add-table-row" id="add-table-row-componentes"><i class="fa-solid fa-plus fa-2x"></i></button>
+        </section>
+
+        <!-- Estoque -->
+        <section id="estoque" class="hero">
+
+            <div class="table-area">
+                <table id="tabela">
+                    <thead>
+                        <tr>
+                            <th>Código do Estoque</th>
+                            <th>Código do Componente</th>
+                            <th>Quantidade Mínima</th>
+                            <th>Quantidade Máxima</th>
+                            <th>Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-estoque">
+
+                    </tbody>
+                </table>
+
+                <div class="add-form" id="add-form-estoque" style="display: none;">
+                    <h1>Adicionar Item</h1>
+
+                    <form>
+                        <label>Código do Componente</label>
+                        <input type="text" id="add-codigo-componentes-estoque" type="number">
+
+                        <label>Quantidade Mínima</label>
+                        <input type="text" id="add-quantidade-min-estoque">
+
+                        <label>Quantidade Máxima</label>
+                        <input type="text" id="add-quantidade-max-estoque">
+
+                        <label>Quantidade</label>
+                        <input type="text" id="add-quantidade-estoque">
+
+                        <div class="form-btns">
+                            <button class="confirm-btn" id="confirm-btn-estoque">Adicionar</button>
+                            <button class="cancel-btn" id="cancel-btn-estoque">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="edit-form" id="edit-form-estoque">
+                    <h1>Editar Item</h1>
+
+                    <form>
+                        <label>Código do Estoque</label>
+                        <input type="text" id="edit-codigo-estoque-estoque">
+
+                        <label>Código do Componentes</label>
+                        <input type="text" id="edit-codigo-componentes-estoque">
+
+                        <label>Quantidade Mínima</label>
+                        <input type="text" id="edit-quantidade-min-estoque">
+
+                        <label>Quantidade Máxima</label>
+                        <input type="text" id="edit-quantidade-max-estoque">
+
+                        <label>Quantidade</label>
+                        <input type="text" id="edit-quantidade-estoque">
+
+
+                        <div class="form-btns">
+                            <button class="confirm-btn" id="update-btn-edit-estoque">Atualizar</button>
+                            <button class="cancel-btn" id="cancel-btn-edit-estoque">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <button class="add-table-row" id="add-table-row-estoque"><i class="fa-solid fa-plus fa-2x"></i></button>
+        </section>
+
+        <!-- Entradas -->
+        <section id="entradas" class="hero">
+
+            <div class="table-area">
+                <table id="tabela">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Data da Venda</th>
+                            <th>Quantidade</th>
+                            <th>Nota Fiscal</th>
+                            <th>Valor Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-entradas">
+
+                    </tbody>
+                </table>
+
+                <div class="add-form" id="add-form-entradas" style="display: none;">
+                    <h1>Adicionar Entrada</h1>
+
+                    <form>
+                        <label>Código</label>
+                        <input type="text" id="add-codigo-entradas">
+
+                        <label>Data da Venda</label>
+                        <input type="text" id="add-data-venda-entradas">
+
+                        <labell>Quantidade</label>
+                            <input type="text" id="add-quantidade-entradas">
+
+                            <labell>Nota Fiscal</label>
+                                <input type="text" id="add-nota-fiscal-entradas">
+
+                                <labell>Valor Total</label>
+                                    <input type="text" id="add-valor-total-entradas">
+
+
+                                    <div class="form-btns">
+                                        <button class="confirm-btn" id="confirm-btn-entradas">Adicionar</button>
+                                        <button class="cancel-btn" id="cancel-btn-entradas">Cancelar</button>
+                                    </div>
+                    </form>
+                </div>
+
+                <div class="edit-form" id="edit-form-entradas">
+                    <h1>Editar Entrada</h1>
+
+                    <form>
+                        <label>Código</label>
+                        <input type="text" id="edit-codigo-entradas">
+
+                        <label>Data da Venda</label>
+                        <input type="text" id="edit-data-venda-entradas">
+
+                        <labell>Quantidade</label>
+                            <input type="text" id="edit-quantidade-entradas">
+
+                            <labell>Nota Fiscal</label>
+                                <input type="text" id="edit-nota-fiscal-entradas">
+
+                                <labell>Valor Total</label>
+                                    <input type="text" id="edit-valor-total-entradas">
+
+
+                                    <div class="form-btns">
+                                        <button class="confirm-btn" id="update-btn-entradas">Atualizar</button>
+                                        <button class="cancel-btn" id="cancel-btn-edit-entradas">Cancelar</button>
+                                    </div>
+                    </form>
+                </div>
+            </div>
+
+            <button class="add-table-row" id="add-table-row-entradas"><i class="fa-solid fa-plus fa-2x"></i></button>
+        </section>
+
+        <!-- Saídas -->
+        <section id="saidas" class="hero">
+
+            <div class="table-area">
+                <table id="tabela">
+                    <thead>
+                        <tr>
+                            <th>Data da Venda</th>
+                            <th>Quantidade</th>
+                            <th>Código do Cliente</th>
+                            <th>Nome do Cliente</th>
+                            <th>Código da Ordem de Serviço</th>
+                            <th>Valor Total</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-saidas">
+
+                    </tbody>
+                </table>
+
+                <div class="add-form" id="add-form-saidas" style="display: none;">
+                    <h1>Adicionar Saída</h1>
+
+                    <form>
+                        <label>Data da Venda</label>
+                        <input type="text" id="add-data-venda-saidas">
+
+                        <label>Nome</label>
+                        <input type="text" id="add-quantidade-saidas">
+
+                        <label>Código do Cliente</label>
+                        <input type="text" id="add-codigo-cliente-saidas">
+
+                        <label>Nome do Cliente</label>
+                        <input type="text" id="add-nome-cliente-saidas">
+
+                        <label>Código da Ordem de Serviço</label>
+                        <input type="text" id="add-ordem-servico-saidas">
+
+                        <label>Valor Total</label>
+                        <input type="text" id="add-valor-total-saidas">
+
+                        <label>Descrição</label>
+                        <input type="text" id="add-descricao-saidas">
+
+
+                        <div class="form-btns">
+                            <button class="confirm-btn" id="confirm-btn-saidas">Adicionar</button>
+                            <button class="cancel-btn" id="cancel-btn-saidas">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="edit-form" id="edit-form-saidas">
+                    <h1>Editar Saída</h1>
+
+                    <form>
+                        <label>Data da Venda</label>
+                        <input type="text" id="edit-data-venda-saidas">
+
+                        <label>Nome</label>
+                        <input type="text" id="edit-quantidade-saidas">
+
+                        <label>Código do Cliente</label>
+                        <input type="text" id="edit-codigo-cliente-saidas">
+
+                        <label>Nome do Cliente</label>
+                        <input type="text" id="edit-nome-cliente-saidas">
+
+                        <label>Código da Ordem de Serviço</label>
+                        <input type="text" id="edit-ordem-servico-saidas">
+
+                        <label>Valor Total</label>
+                        <input type="text" id="edit-valor-total-saidas">
+
+                        <label>Descrição</label>
+                        <input type="text" id="edit-descricao-saidas">
+
+
+                        <div class="form-btns">
+                            <button class="confirm-btn" id="update-btn-edit-saidas">Atualizar</button>
+                            <button class="cancel-btn" id="cancel-btn-edit-saidas">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <button class="add-table-row" id="add-table-row-saidas"><i class="fa-solid fa-plus fa-2x"></i></button>
+        </section>
+
+        <section id="ordemServico" class="hero">
+            <div class="table-area">
+                <table id="tabela-ordem-servico">
+                    <thead>
+                        <tr>
+                            <th>Código Ordem Serviço</th>
+                            <th>Data de Emissão</th>
+                            <th>Código do Cliente</th>
+                            <th>Nome do Cliente</th>
+                            <th>Pedido</th>
+                            <th>Concluída</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-ordem-servico">
+
+                    </tbody>
+                </table>
+
+                <div class="add-form" id="add-form-ordem-servico" style="display: none;">
+                    <h1>Adicionar Item</h1>
+
+                    <form>
+                        <label>Data de Emissão</label>
+                        <input type="date" id="add-data-emissao-ordem-servico">
+
+                       <label>Código do Cliente</label>
+                        <select id="add-codigo-cliente-ordem-servico">
+                            <option value="null" selected>Selecionar Código</option>
+                        </select>
+
+                        <label>Pedido</label>
+                        <input type="text" id="add-pedido-ordem-servico">
+
+                        <label>Concluída</label>
+                        <select id="add-concluida-ordem-servico">
+                            <option value="true">Sim</option>
+                            <option value="false">Não</option>
+                        </select>
+
+                        <div class="form-btns">
+                            <button class="confirm-btn" id="confirm-btn-ordem-servico">Adicionar</button>
+                            <button class="cancel-btn" id="cancel-btn-ordem-servico">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="edit-form" id="edit-form-ordem-servico">
+                    <h1>Editar Item</h1>
+
+                    <form>
+
+                        <label>Data de Emissão</label>
+                        <input type="date" id="edit-data-emissao-ordem-servico">
+
+                        <label>Código do Cliente</label>
+                        <select id="edit-codigo-cliente-ordem-servico">
+                            <option value="null" selected>Selecionar Código</option>
+                        </select>
+                        <label>Pedido</label>
+                        <input type="text" id="edit-pedido-ordem-servico">
+
+                        <label>Concluída</label>
+                        <select id="edit-concluida-ordem-servico">
+                            <option value="true">Sim</option>
+                            <option value="false">Não</option>
+                        </select>
+
+                        <div class="form-btns">
+                            <button class="confirm-btn" id="update-btn-ordem-servico">Adicionar</button>
+                            <button class="cancel-btn" id="cancel-btn-edit-ordem-servico">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <button class="add-table-row" id="add-table-row-ordem-servico"><i
+                    class="fa-solid fa-plus fa-2x"></i></button>
+        </section>
+
+        <!-- Mensagem de Erro -->
+        <div id="mensagem-erro-container" class="error-message">
+            <div class="error-message-content">
+                <ion-icon name="close"></ion-icon>
+                <p id="mensagem-erro"></p>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+
+</html>
